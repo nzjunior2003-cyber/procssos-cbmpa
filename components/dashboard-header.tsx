@@ -10,7 +10,6 @@ interface DashboardHeaderProps {
   status: LoadStatus
   lastUpdated: Date | null
   onRefresh: () => void
-  onUseMock: () => void
 }
 
 export function DashboardHeader({
@@ -18,7 +17,6 @@ export function DashboardHeader({
   status,
   lastUpdated,
   onRefresh,
-  onUseMock,
 }: DashboardHeaderProps) {
   const loading = status === "loading"
   return (
@@ -62,12 +60,6 @@ export function DashboardHeader({
             )}
           </div>
           <div className="flex items-center gap-2">
-            {source === "live" && (
-              <Button variant="outline" size="sm" onClick={onUseMock} disabled={loading}>
-                <FlaskConical data-icon="inline-start" />
-                Usar exemplo
-              </Button>
-            )}
             <Button size="sm" onClick={onRefresh} disabled={loading}>
               <RefreshCw data-icon="inline-start" className={cn(loading && "animate-spin")} />
               {loading ? "Atualizando…" : "Atualizar dados"}

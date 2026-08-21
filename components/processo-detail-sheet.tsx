@@ -95,8 +95,6 @@ export function ProcessoDetailSheet({
                     "—"
                   )}
                 </Field>
-                <Field label="Fase">{processo.faseProcesso}</Field>
-                <Field label="Subfase">{processo.subfaseRaw}</Field>
                 <Field label="Setor demandante">{processo.setorDemandante}</Field>
                 <Field label="Natureza de despesa">{processo.naturezaDespesa}</Field>
                 <Field label="Rito processual">{processo.ritoProcessual}</Field>

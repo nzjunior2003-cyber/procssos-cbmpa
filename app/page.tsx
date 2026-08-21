@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button"
 import { TriangleAlert, RotateCw } from "lucide-react"
 
 export default function Page() {
-  const { processos, source, status, error, lastUpdated, refresh, useMockData } = useProcessos()
+  const { processos, source, status, error, lastUpdated, refresh } = useProcessos()
   const [selected, setSelected] = useState<Processo | null>(null)
   const [sheetOpen, setSheetOpen] = useState(false)
 
@@ -34,7 +34,6 @@ export default function Page() {
         status={status}
         lastUpdated={lastUpdated}
         onRefresh={refresh}
-        onUseMock={useMockData}
       />
 
       <main className="mx-auto flex max-w-[1400px] flex-col gap-4 px-4 py-5 md:px-6">
@@ -69,8 +68,8 @@ export default function Page() {
           <ContentSkeleton />
         ) : (
           <>
-            <DashboardCharts processos={processos} />
             <ProcessosTable processos={processos} onRowClick={handleRowClick} />
+            <DashboardCharts processos={processos} />
           </>
         )}
       </main>
