@@ -15,7 +15,7 @@ import { Card } from "@/components/ui/card"
 import { StatusBadge } from "@/components/status-badge"
 import { FilterSelect, ALL_VALUE } from "@/components/filter-select"
 import { uniqueValues } from "@/lib/metrics"
-import { groupRito } from "@/lib/processo-utils"
+import { groupRito, setorAtualLabel } from "@/lib/processo-utils"
 import { cn } from "@/lib/utils"
 import type { Processo } from "@/lib/types"
 import {
@@ -28,7 +28,7 @@ import {
   FilterX,
 } from "lucide-react"
 
-type SortKey = "pae" | "setorDemandante" | "ritoProcessual" | "diasUltimoAndamento" | "vEstimado"
+type SortKey = "pae" | "setorAtual" | "ritoProcessual" | "diasUltimoAndamento" | "vEstimado"
 type SortDir = "asc" | "desc"
 
 interface Filters {
@@ -36,7 +36,6 @@ interface Filters {
   natureza: string
   setor: string
   fonte: string
-  subfase: string
   previsao: string
 }
 
@@ -45,7 +44,6 @@ const INITIAL_FILTERS: Filters = {
   natureza: ALL_VALUE,
   setor: ALL_VALUE,
   fonte: ALL_VALUE,
-  subfase: ALL_VALUE,
   previsao: ALL_VALUE,
 }
 
@@ -57,6 +55,8 @@ function compare(a: Processo, b: Processo, key: SortKey): number {
       return (a.diasUltimoAndamento ?? -1) - (b.diasUltimoAndamento ?? -1)
     case "vEstimado":
       return (a.vEstimado ?? -1) - (b.vEstimado ?? -1)
+    case "setorAtual":
+      return setorAtualLabel(a.setorAtualPath).localeCompare(setorAtualLabel(b.setorAtualPath), "pt-BR")
     default:
       return String(a[key]).localeCompare(String(b[key]), "pt-BR")
   }
@@ -79,9 +79,8 @@ export function ProcessosTable({
     () => ({
       rito: uniqueValues(processos, (p) => groupRito(p.ritoProcessual)),
       natureza: uniqueValues(processos, (p) => p.naturezaDespesa),
-      setor: uniqueValues(processos, (p) => p.setorDemandante),
+      setor: uniqueValues(processos, (p) => setorAtualLabel(p.setorAtualPath)),
       fonte: uniqueValues(processos, (p) => p.fonte),
-      subfase: uniqueValues(processos, (p) => p.subfaseLabel),
       previsao: uniqueValues(processos, (p) => p.previsaoPca),
     }),
     [processos],
@@ -96,9 +95,8 @@ export function ProcessosTable({
       }
       if (filters.rito !== ALL_VALUE && groupRito(p.ritoProcessual) !== filters.rito) return false
       if (filters.natureza !== ALL_VALUE && p.naturezaDespesa !== filters.natureza) return false
-      if (filters.setor !== ALL_VALUE && p.setorDemandante !== filters.setor) return false
+      if (filters.setor !== ALL_VALUE && setorAtualLabel(p.setorAtualPath) !== filters.setor) return false
       if (filters.fonte !== ALL_VALUE && p.fonte !== filters.fonte) return false
-      if (filters.subfase !== ALL_VALUE && p.subfaseLabel !== filters.subfase) return false
       if (filters.previsao !== ALL_VALUE && p.previsaoPca !== filters.previsao) return false
       return true
     })
@@ -166,7 +164,7 @@ export function ProcessosTable({
       </div>
 
       {/* Filtros */}
-      <div className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-6">
+      <div className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-5">
         <FilterSelect
           label="Rito"
           value={filters.rito}
@@ -180,7 +178,7 @@ export function ProcessosTable({
           onValueChange={(v) => updateFilter("natureza", v)}
         />
         <FilterSelect
-          label="Setor"
+          label="Setor Atual"
           value={filters.setor}
           options={options.setor}
           onValueChange={(v) => updateFilter("setor", v)}
@@ -190,12 +188,6 @@ export function ProcessosTable({
           value={filters.fonte}
           options={options.fonte}
           onValueChange={(v) => updateFilter("fonte", v)}
-        />
-        <FilterSelect
-          label="Subfase"
-          value={filters.subfase}
-          options={options.subfase}
-          onValueChange={(v) => updateFilter("subfase", v)}
         />
         <FilterSelect
           label="Previsão PCA"
@@ -213,10 +205,10 @@ export function ProcessosTable({
               <SortHeader label="N° PAE" active={sortKey === "pae"} dir={sortDir} onClick={() => toggleSort("pae")} />
               <TableHead className="min-w-[240px]">Objeto</TableHead>
               <SortHeader
-                label="Setor"
-                active={sortKey === "setorDemandante"}
+                label="Setor Atual"
+                active={sortKey === "setorAtual"}
                 dir={sortDir}
-                onClick={() => toggleSort("setorDemandante")}
+                onClick={() => toggleSort("setorAtual")}
               />
               <SortHeader
                 label="Rito"
@@ -224,7 +216,6 @@ export function ProcessosTable({
                 dir={sortDir}
                 onClick={() => toggleSort("ritoProcessual")}
               />
-              <TableHead>Subfase</TableHead>
               <SortHeader
                 label="Dias parado"
                 active={sortKey === "diasUltimoAndamento"}
@@ -238,7 +229,7 @@ export function ProcessosTable({
           <TableBody>
             {pageItems.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7} className="h-32 text-center text-muted-foreground">
+                <TableCell colSpan={6} className="h-32 text-center text-muted-foreground">
                   Nenhum processo encontrado com os filtros atuais.
                 </TableCell>
               </TableRow>
@@ -262,13 +253,10 @@ export function ProcessosTable({
                   </TableCell>
                   <TableCell className="max-w-[180px]">
                     <span className="line-clamp-2 text-xs text-muted-foreground">
-                      {p.setorDemandante || "—"}
+                      {setorAtualLabel(p.setorAtualPath) || "—"}
                     </span>
                   </TableCell>
                   <TableCell className="text-xs whitespace-nowrap">{p.ritoProcessual || "—"}</TableCell>
-                  <TableCell className="text-xs whitespace-nowrap">
-                    {p.subfaseRaw || "—"}
-                  </TableCell>
                   <TableCell className="text-right tabular-nums">
                     {p.diasUltimoAndamento ?? "—"}
                   </TableCell>
