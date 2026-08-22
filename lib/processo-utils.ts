@@ -70,6 +70,21 @@ export function parseSubfase(input: string | undefined | null): {
   return { ordem: null, label: raw }
 }
 
+/**
+ * Verdadeiro quando a subfase do processo (coluna Q da planilha) for "CONTRATADO".
+ * Usado para o KPI/filtro "Contratado/Aditivado".
+ */
+export function isContratadoAditivado(p: { subfaseLabel: string }): boolean {
+  return (p.subfaseLabel ?? "").trim().toUpperCase() === "CONTRATADO"
+}
+
+/**
+ * Verdadeiro quando a coluna Y (PREVISÃO NO PCA) estiver marcada como "SIM".
+ */
+export function isPrevistoPca(p: { previsaoPca: string }): boolean {
+  return (p.previsaoPca ?? "").trim().toUpperCase() === "SIM"
+}
+
 /** "CBM > SETOR > LOCAL" -> ["CBM", "SETOR", "LOCAL"] */
 export function parseSetorPath(input: string | undefined | null): string[] {
   if (!input) return []

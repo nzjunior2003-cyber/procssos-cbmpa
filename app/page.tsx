@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react"
 import { useProcessos } from "@/hooks/use-processos"
 import { computeKpis } from "@/lib/metrics"
+import { isContratadoAditivado } from "@/lib/processo-utils"
 import type { Processo } from "@/lib/types"
 import { DashboardHeader } from "@/components/dashboard-header"
 import { KpiCards } from "@/components/kpi-cards"
@@ -12,15 +13,21 @@ import { ProcessoDetailSheet } from "@/components/processo-detail-sheet"
 import { ContentSkeleton } from "@/components/dashboard-skeleton"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
-import { TriangleAlert, RotateCw } from "lucide-react"
+import { TriangleAlert, RotateCw, X } from "lucide-react"
 
 export default function Page() {
   const { processos, source, status, error, lastUpdated, refresh } = useProcessos()
   const [selected, setSelected] = useState<Processo | null>(null)
   const [sheetOpen, setSheetOpen] = useState(false)
+  const [contratadoFilterActive, setContratadoFilterActive] = useState(false)
 
   const kpis = useMemo(() => computeKpis(processos), [processos])
   const loading = status === "loading"
+
+  const processosDaTabela = useMemo(
+    () => (contratadoFilterActive ? processos.filter(isContratadoAditivado) : processos),
+    [processos, contratadoFilterActive],
+  )
 
   function handleRowClick(processo: Processo) {
     setSelected(processo)
@@ -62,13 +69,36 @@ export default function Page() {
           </Alert>
         )}
 
-        <KpiCards kpis={kpis} loading={loading} />
+        <KpiCards
+          kpis={kpis}
+          loading={loading}
+          contratadoFilterActive={contratadoFilterActive}
+          onToggleContratadoFilter={() => setContratadoFilterActive((v) => !v)}
+        />
 
         {loading ? (
           <ContentSkeleton />
         ) : (
           <>
-            <ProcessosTable processos={processos} onRowClick={handleRowClick} />
+            {contratadoFilterActive && (
+              <Alert>
+                <AlertDescription className="flex flex-wrap items-center justify-between gap-2">
+                  <span>
+                    Mostrando apenas processos <strong>Contratado/Aditivado</strong> (
+                    {processosDaTabela.length} de {processos.length}).
+                  </span>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setContratadoFilterActive(false)}
+                  >
+                    <X data-icon="inline-start" />
+                    Limpar filtro
+                  </Button>
+                </AlertDescription>
+              </Alert>
+            )}
+            <ProcessosTable processos={processosDaTabela} onRowClick={handleRowClick} />
             <DashboardCharts processos={processos} />
           </>
         )}

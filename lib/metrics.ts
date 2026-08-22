@@ -1,4 +1,4 @@
-import { groupRito, setorAtualLabel } from "./processo-utils"
+import { groupRito, setorAtualLabel, isContratadoAditivado, isPrevistoPca } from "./processo-utils"
 import type { Processo } from "./types"
 
 export interface Kpis {
@@ -10,6 +10,8 @@ export interface Kpis {
   parados30: number
   somaEstimadoAtivos: number
   semPrevisaoPca: number
+  contratadosAditivados: number
+  previstosPca: number
 }
 
 /** Processo "ativo" = nem finalizado nem arquivado. */
@@ -30,6 +32,8 @@ export function computeKpis(processos: Processo[]): Kpis {
     ).length,
     somaEstimadoAtivos: ativos.reduce((acc, p) => acc + (p.vEstimado ?? 0), 0),
     semPrevisaoPca: processos.filter((p) => p.previsaoPca.trim().toUpperCase() === "NÃO").length,
+    contratadosAditivados: processos.filter(isContratadoAditivado).length,
+    previstosPca: processos.filter(isPrevistoPca).length,
   }
 }
 
