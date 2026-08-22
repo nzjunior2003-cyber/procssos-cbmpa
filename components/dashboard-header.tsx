@@ -24,12 +24,12 @@ export function DashboardHeader({
   return (
     <header className="border-b border-border bg-card">
       <div className="mx-auto flex max-w-[1400px] flex-col gap-4 px-4 py-4 md:flex-row md:items-center md:justify-between md:px-6">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={`${BASE_PATH}/dal-badge.png`}
             alt="Brasão da Seção de Apoio e Suprimento - DAL"
-            className="h-11 w-auto shrink-0"
+            className="h-16 w-auto shrink-0"
           />
           <div>
             <h1 className="text-lg font-semibold tracking-tight text-foreground text-balance md:text-xl">
