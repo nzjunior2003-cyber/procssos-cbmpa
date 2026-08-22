@@ -37,6 +37,7 @@ interface Filters {
   setor: string
   fonte: string
   previsao: string
+  demandante: string
 }
 
 const INITIAL_FILTERS: Filters = {
@@ -45,6 +46,7 @@ const INITIAL_FILTERS: Filters = {
   setor: ALL_VALUE,
   fonte: ALL_VALUE,
   previsao: ALL_VALUE,
+  demandante: ALL_VALUE,
 }
 
 const PAGE_SIZE = 10
@@ -82,6 +84,7 @@ export function ProcessosTable({
       setor: uniqueValues(processos, (p) => setorAtualLabel(p.setorAtualPath)),
       fonte: uniqueValues(processos, (p) => p.fonte),
       previsao: uniqueValues(processos, (p) => p.previsaoPca),
+      demandante: uniqueValues(processos, (p) => p.setorDemandante),
     }),
     [processos],
   )
@@ -98,6 +101,7 @@ export function ProcessosTable({
       if (filters.setor !== ALL_VALUE && setorAtualLabel(p.setorAtualPath) !== filters.setor) return false
       if (filters.fonte !== ALL_VALUE && p.fonte !== filters.fonte) return false
       if (filters.previsao !== ALL_VALUE && p.previsaoPca !== filters.previsao) return false
+      if (filters.demandante !== ALL_VALUE && p.setorDemandante !== filters.demandante) return false
       return true
     })
     result.sort((a, b) => {
@@ -164,7 +168,7 @@ export function ProcessosTable({
       </div>
 
       {/* Filtros */}
-      <div className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-5">
+      <div className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-6">
         <FilterSelect
           label="Rito"
           value={filters.rito}
@@ -194,6 +198,12 @@ export function ProcessosTable({
           value={filters.previsao}
           options={options.previsao}
           onValueChange={(v) => updateFilter("previsao", v)}
+        />
+        <FilterSelect
+          label="Demandante"
+          value={filters.demandante}
+          options={options.demandante}
+          onValueChange={(v) => updateFilter("demandante", v)}
         />
       </div>
 
