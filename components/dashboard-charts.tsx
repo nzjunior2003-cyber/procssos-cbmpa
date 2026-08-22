@@ -65,15 +65,15 @@ export function DashboardCharts({ processos }: { processos: Processo[] }) {
 
   return (
     <section aria-label="Gráficos" className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-      {/* Processos por setor demandante */}
+      {/* Processos por setor atual */}
       <Card>
         <CardHeader>
-          <CardTitle>Processos por setor demandante</CardTitle>
-          <CardDescription>Top 10 setores com mais processos</CardDescription>
+          <CardTitle>Processos por setor atual</CardTitle>
+          <CardDescription>Top 10 setores com mais processos tramitando</CardDescription>
         </CardHeader>
         <CardContent>
-          <ChartContainer config={setorConfig} className="h-[300px] w-full">
-            <BarChart data={setores} layout="vertical" margin={{ left: 8, right: 24 }}>
+          <ChartContainer config={setorAtualConfig} className="h-[300px] w-full">
+            <BarChart data={setoresAtuais} layout="vertical" margin={{ left: 8, right: 24 }}>
               <CartesianGrid horizontal={false} />
               <XAxis type="number" hide />
               <YAxis
@@ -130,15 +130,15 @@ export function DashboardCharts({ processos }: { processos: Processo[] }) {
         </CardContent>
       </Card>
 
-      {/* Processos por setor atual */}
+      {/* Processos por setor demandante */}
       <Card>
         <CardHeader>
-          <CardTitle>Processos por setor atual</CardTitle>
-          <CardDescription>Top 10 setores com mais processos tramitando</CardDescription>
+          <CardTitle>Processos por setor demandante</CardTitle>
+          <CardDescription>Top 10 setores com mais processos</CardDescription>
         </CardHeader>
         <CardContent>
-          <ChartContainer config={setorAtualConfig} className="h-[300px] w-full">
-            <BarChart data={setoresAtuais} layout="vertical" margin={{ left: 8, right: 24 }}>
+          <ChartContainer config={setorConfig} className="h-[300px] w-full">
+            <BarChart data={setores} layout="vertical" margin={{ left: 8, right: 24 }}>
               <CartesianGrid horizontal={false} />
               <XAxis type="number" hide />
               <YAxis
@@ -167,16 +167,18 @@ export function DashboardCharts({ processos }: { processos: Processo[] }) {
         </CardHeader>
         <CardContent>
           <ChartContainer config={naturezaConfig} className="h-[300px] w-full">
-            <BarChart data={naturezas} margin={{ top: 24, left: 0, right: 8 }}>
-              <CartesianGrid vertical={false} />
-              <XAxis
+            <BarChart data={naturezas} layout="vertical" margin={{ left: 8, right: 32 }}>
+              <CartesianGrid horizontal={false} />
+              <XAxis type="number" hide />
+              <YAxis
+                type="category"
                 dataKey="label"
                 tickLine={false}
                 axisLine={false}
+                width={140}
                 tick={{ fontSize: 11 }}
-                tickFormatter={(v: string) => shorten(v, 12)}
+                tickFormatter={(v: string) => shorten(v, 20)}
               />
-              <YAxis hide />
               <ChartTooltip
                 content={
                   <ChartTooltipContent
@@ -184,10 +186,10 @@ export function DashboardCharts({ processos }: { processos: Processo[] }) {
                   />
                 }
               />
-              <Bar dataKey="value" fill="var(--color-value)" radius={6}>
+              <Bar dataKey="value" fill="var(--color-value)" radius={4}>
                 <LabelList
                   dataKey="value"
-                  position="top"
+                  position="right"
                   className="fill-foreground text-xs"
                   formatter={(value) => formatBRLCompact(Number(value))}
                 />

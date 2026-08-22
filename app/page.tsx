@@ -77,9 +77,11 @@ export default function Page() {
       <ProcessoDetailSheet processo={selected} open={sheetOpen} onOpenChange={setSheetOpen} />
 
       <footer className="border-t border-border py-6">
-        <p className="mx-auto max-w-[1400px] px-4 text-center text-xs text-muted-foreground md:px-6">
-          Corpo de Bombeiros Militar do Pará • Painel de acompanhamento de processos administrativos
-        </p>
+        <div className="mx-auto max-w-[1400px] px-4 text-center text-xs text-muted-foreground md:px-6">
+          <p>Corpo de Bombeiros Militar do Pará</p>
+          <p>Departamento Geral de Administração</p>
+          <p>Diretoria de Apoio Logístico</p>
+        </div>
       </footer>
     </div>
   )

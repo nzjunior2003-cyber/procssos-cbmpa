@@ -3,7 +3,9 @@
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import type { LoadStatus, SourceKind } from "@/lib/types"
-import { Flame, RefreshCw, Database, FlaskConical } from "lucide-react"
+import { RefreshCw, Database, FlaskConical } from "lucide-react"
+
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? ""
 
 interface DashboardHeaderProps {
   source: SourceKind
@@ -23,9 +25,12 @@ export function DashboardHeader({
     <header className="border-b border-border bg-card">
       <div className="mx-auto flex max-w-[1400px] flex-col gap-4 px-4 py-4 md:flex-row md:items-center md:justify-between md:px-6">
         <div className="flex items-center gap-3">
-          <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-            <Flame className="size-6" aria-hidden />
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={`${BASE_PATH}/dal-badge.png`}
+            alt="Brasão da Seção de Apoio e Suprimento - DAL"
+            className="h-11 w-auto shrink-0"
+          />
           <div>
             <h1 className="text-lg font-semibold tracking-tight text-foreground text-balance md:text-xl">
               Painel de Processos Administrativos
