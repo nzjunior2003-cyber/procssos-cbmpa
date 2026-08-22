@@ -127,11 +127,16 @@ export function setorAtualLabel(path: string[]): string {
   return ""
 }
 
-/** Deriva o status colorido a partir do andamento e dias parado. */
-export function deriveStatus(andamento: string, dias: number | null): StatusKey {
+/** Deriva o status colorido a partir do andamento, dias parado e subfase (coluna Q). */
+export function deriveStatus(
+  andamento: string,
+  dias: number | null,
+  subfaseLabel?: string,
+): StatusKey {
   const a = norm(andamento)
   if (a === "FINALIZADO") return "finalizado"
   if (a === "ARQUIVADO") return "arquivado"
+  if (norm(subfaseLabel ?? "") === "CONTRATADO") return "contratado"
   if (dias != null && dias > 30) return "atrasado"
   if (dias != null && dias >= 15 && dias <= 30) return "atencao"
   return "andamento"
@@ -154,7 +159,7 @@ export function normalizeRow(row: RawRow): Processo | null {
   const andamento = (row[COLUMNS.andamento] ?? "").trim()
   const dias = parseInteger(row[COLUMNS.diasUltimoAndamento])
   const { ordem, label } = parseSubfase(row[COLUMNS.subfaseProcesso])
-  const status = deriveStatus(andamento, dias)
+  const status = deriveStatus(andamento, dias, label)
 
   return {
     pae,

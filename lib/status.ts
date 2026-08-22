@@ -17,6 +17,11 @@ export const STATUS_META: Record<StatusKey, StatusMeta> = {
     className: "bg-status-archived text-status-archived-foreground",
     dot: "bg-status-archived-foreground",
   },
+  contratado: {
+    label: "Contratado/Aditivado",
+    className: "bg-status-ok text-status-ok-foreground",
+    dot: "bg-status-ok-foreground",
+  },
   atrasado: {
     label: "Atrasado (+30d)",
     className: "bg-status-late text-status-late-foreground",

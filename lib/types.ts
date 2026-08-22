@@ -26,7 +26,7 @@ export const COLUMNS = {
 // Linha bruta da planilha (chaves = cabeçalhos originais).
 export type RawRow = Record<string, string>
 
-export type StatusKey = "finalizado" | "arquivado" | "atrasado" | "atencao" | "andamento"
+export type StatusKey = "finalizado" | "arquivado" | "contratado" | "atrasado" | "atencao" | "andamento"
 
 // Processo normalizado, pronto para consumo pela UI.
 export interface Processo {
