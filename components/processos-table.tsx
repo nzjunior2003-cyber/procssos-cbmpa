@@ -93,7 +93,7 @@ export function ProcessosTable({
     const q = search.trim().toLowerCase()
     const result = processos.filter((p) => {
       if (q) {
-        const haystack = `${p.pae} ${p.objeto} ${p.setorDemandante} ${setorAtualLabel(p.setorAtualPath)}`.toLowerCase()
+        const haystack = `${p.pae} ${p.objeto} ${p.setorDemandante} ${p.setorAtualPath.join(" ")}`.toLowerCase()
         if (!haystack.includes(q)) return false
       }
       if (filters.rito !== ALL_VALUE && groupRito(p.ritoProcessual) !== filters.rito) return false
