@@ -93,7 +93,7 @@ export function ProcessosTable({
     const q = search.trim().toLowerCase()
     const result = processos.filter((p) => {
       if (q) {
-        const haystack = `${p.pae} ${p.objeto} ${p.setorDemandante}`.toLowerCase()
+        const haystack = `${p.pae} ${p.objeto} ${p.setorDemandante} ${setorAtualLabel(p.setorAtualPath)}`.toLowerCase()
         if (!haystack.includes(q)) return false
       }
       if (filters.rito !== ALL_VALUE && groupRito(p.ritoProcessual) !== filters.rito) return false
@@ -154,7 +154,7 @@ export function ProcessosTable({
               setSearch(e.target.value)
               setPage(0)
             }}
-            placeholder="Buscar por N° PAE, objeto ou setor demandante…"
+            placeholder="Buscar por N° PAE, objeto, setor demandante ou setor atual…"
             className="pl-8"
             aria-label="Buscar processos"
           />
