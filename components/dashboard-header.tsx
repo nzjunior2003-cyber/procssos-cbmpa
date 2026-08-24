@@ -23,7 +23,7 @@ export function DashboardHeader({
   const loading = status === "loading"
   return (
     <header className="border-b border-border bg-card">
-      <div className="mx-auto flex max-w-[1800px] flex-col gap-4 px-4 py-4 md:flex-row md:items-center md:justify-between md:px-6">
+      <div className="mx-auto flex max-w-[1400px] flex-col gap-4 px-4 py-4 md:flex-row md:items-center md:justify-between md:px-6">
         <div className="flex items-center gap-4">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img

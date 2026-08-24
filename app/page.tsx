@@ -43,7 +43,7 @@ export default function Page() {
         onRefresh={refresh}
       />
 
-      <main className="mx-auto flex max-w-[1800px] flex-col gap-4 px-4 py-5 md:px-6">
+      <main className="mx-auto flex max-w-[1400px] flex-col gap-4 px-4 py-5 md:px-6">
         {source === "mock" && status !== "loading" && (
           <Alert>
             <TriangleAlert />
@@ -107,7 +107,7 @@ export default function Page() {
       <ProcessoDetailSheet processo={selected} open={sheetOpen} onOpenChange={setSheetOpen} />
 
       <footer className="border-t border-border py-6">
-        <div className="mx-auto max-w-[1800px] px-4 text-center text-xs text-muted-foreground md:px-6">
+        <div className="mx-auto max-w-[1400px] px-4 text-center text-xs text-muted-foreground md:px-6">
           <p>Corpo de Bombeiros Militar do Pará</p>
           <p>Departamento Geral de Administração</p>
           <p>Diretoria de Apoio Logístico</p>
