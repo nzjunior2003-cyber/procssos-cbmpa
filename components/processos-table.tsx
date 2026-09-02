@@ -227,7 +227,7 @@ export function ProcessosTable({
                 onClick={() => toggleSort("ritoProcessual")}
               />
               <SortHeader
-                label="Dias parado"
+                label="Dias no Setor Atual"
                 active={sortKey === "diasUltimoAndamento"}
                 dir={sortDir}
                 onClick={() => toggleSort("diasUltimoAndamento")}
