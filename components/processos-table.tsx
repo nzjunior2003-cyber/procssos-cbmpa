@@ -28,7 +28,7 @@ import {
   FilterX,
 } from "lucide-react"
 
-type SortKey = "pae" | "setorAtual" | "ritoProcessual" | "diasUltimoAndamento" | "vEstimado"
+type SortKey = "pae" | "setorAtual" | "ritoProcessual" | "diasUltimoAndamento" | "tempoTotalDias" | "vEstimado"
 type SortDir = "asc" | "desc"
 
 interface Filters {
@@ -55,6 +55,8 @@ function compare(a: Processo, b: Processo, key: SortKey): number {
   switch (key) {
     case "diasUltimoAndamento":
       return (a.diasUltimoAndamento ?? -1) - (b.diasUltimoAndamento ?? -1)
+    case "tempoTotalDias":
+      return (a.tempoTotalDias ?? -1) - (b.tempoTotalDias ?? -1)
     case "vEstimado":
       return (a.vEstimado ?? -1) - (b.vEstimado ?? -1)
     case "setorAtual":
@@ -233,13 +235,20 @@ export function ProcessosTable({
                 onClick={() => toggleSort("diasUltimoAndamento")}
                 align="right"
               />
+              <SortHeader
+                label="Tempo Total"
+                active={sortKey === "tempoTotalDias"}
+                dir={sortDir}
+                onClick={() => toggleSort("tempoTotalDias")}
+                align="right"
+              />
               <TableHead>Status</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {pageItems.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="h-32 text-center text-muted-foreground">
+                <TableCell colSpan={7} className="h-32 text-center text-muted-foreground">
                   Nenhum processo encontrado com os filtros atuais.
                 </TableCell>
               </TableRow>
@@ -269,6 +278,9 @@ export function ProcessosTable({
                   <TableCell className="text-xs whitespace-nowrap">{p.ritoProcessual || "—"}</TableCell>
                   <TableCell className="text-right tabular-nums">
                     {p.diasUltimoAndamento ?? "—"}
+                  </TableCell>
+                  <TableCell className="text-right tabular-nums">
+                    {p.tempoTotalDias ?? "—"}
                   </TableCell>
                   <TableCell>
                     <StatusBadge status={p.status} />
