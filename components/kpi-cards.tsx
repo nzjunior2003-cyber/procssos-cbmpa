@@ -74,7 +74,7 @@ export function KpiCards({
     },
     {
       key: "parados",
-      label: "Parados +30 dias",
+      label: "No mesmo setor +30 dias",
       value: String(kpis.parados30),
       hint: "no mesmo andamento",
       icon: AlarmClock,
