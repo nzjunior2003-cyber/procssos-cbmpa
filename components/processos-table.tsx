@@ -16,6 +16,7 @@ import { StatusBadge } from "@/components/status-badge"
 import { FilterSelect, ALL_VALUE } from "@/components/filter-select"
 import { uniqueValues } from "@/lib/metrics"
 import { groupRito, setorAtualLabel } from "@/lib/processo-utils"
+import { STATUS_META } from "@/lib/status"
 import { cn } from "@/lib/utils"
 import type { Processo } from "@/lib/types"
 import {
@@ -38,6 +39,7 @@ interface Filters {
   fonte: string
   previsao: string
   demandante: string
+  status: string
 }
 
 const INITIAL_FILTERS: Filters = {
@@ -47,9 +49,20 @@ const INITIAL_FILTERS: Filters = {
   fonte: ALL_VALUE,
   previsao: ALL_VALUE,
   demandante: ALL_VALUE,
+  status: ALL_VALUE,
 }
 
 const PAGE_SIZE = 10
+
+const STATUS_ORDEM: Processo["status"][] = [
+  "atrasado",
+  "atencao",
+  "andamento",
+  "contratado",
+  "finalizado",
+  "arquivado",
+]
+const STATUS_OPTIONS = STATUS_ORDEM.map((k) => STATUS_META[k].label)
 
 function compare(a: Processo, b: Processo, key: SortKey): number {
   switch (key) {
@@ -104,6 +117,7 @@ export function ProcessosTable({
       if (filters.fonte !== ALL_VALUE && p.fonte !== filters.fonte) return false
       if (filters.previsao !== ALL_VALUE && p.previsaoPca !== filters.previsao) return false
       if (filters.demandante !== ALL_VALUE && p.setorDemandante !== filters.demandante) return false
+      if (filters.status !== ALL_VALUE && STATUS_META[p.status].label !== filters.status) return false
       return true
     })
     result.sort((a, b) => {
@@ -170,7 +184,13 @@ export function ProcessosTable({
       </div>
 
       {/* Filtros */}
-      <div className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-6">
+      <div className="grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-7">
+        <FilterSelect
+          label="Status"
+          value={filters.status}
+          options={STATUS_OPTIONS}
+          onValueChange={(v) => updateFilter("status", v)}
+        />
         <FilterSelect
           label="Rito"
           value={filters.rito}
