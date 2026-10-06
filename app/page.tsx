@@ -8,7 +8,7 @@ import { isContratadoAditivado } from "@/lib/processo-utils"
 import type { Processo } from "@/lib/types"
 import { DashboardHeader } from "@/components/dashboard-header"
 import { KpiCards } from "@/components/kpi-cards"
-import { InsightsPanel } from "@/components/insights-panel"
+import { InsightsSheet } from "@/components/insights-sheet"
 import { DashboardCharts } from "@/components/dashboard-charts"
 import { ProcessosTable } from "@/components/processos-table"
 import { ProcessoDetailSheet } from "@/components/processo-detail-sheet"
@@ -21,6 +21,7 @@ export default function Page() {
   const { processos, source, status, error, lastUpdated, refresh } = useProcessos()
   const [selected, setSelected] = useState<Processo | null>(null)
   const [sheetOpen, setSheetOpen] = useState(false)
+  const [insightsOpen, setInsightsOpen] = useState(false)
   const [contratadoFilterActive, setContratadoFilterActive] = useState(false)
 
   const kpis = useMemo(() => computeKpis(processos), [processos])
@@ -44,6 +45,8 @@ export default function Page() {
         status={status}
         lastUpdated={lastUpdated}
         onRefresh={refresh}
+        insightsCount={insights.length}
+        onOpenInsights={() => setInsightsOpen(true)}
       />
 
       <main className="mx-auto flex max-w-[1400px] flex-col gap-4 px-4 py-5 md:px-6">
@@ -79,8 +82,6 @@ export default function Page() {
           onToggleContratadoFilter={() => setContratadoFilterActive((v) => !v)}
         />
 
-        {!loading && <InsightsPanel insights={insights} />}
-
         {loading ? (
           <ContentSkeleton />
         ) : (
@@ -110,6 +111,7 @@ export default function Page() {
       </main>
 
       <ProcessoDetailSheet processo={selected} open={sheetOpen} onOpenChange={setSheetOpen} />
+      <InsightsSheet insights={insights} open={insightsOpen} onOpenChange={setInsightsOpen} />
 
       <footer className="border-t border-border py-6">
         <div className="mx-auto max-w-[1400px] px-4 text-center text-xs text-muted-foreground md:px-6">

@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import type { LoadStatus, SourceKind } from "@/lib/types"
-import { RefreshCw, Database, FlaskConical } from "lucide-react"
+import { RefreshCw, Database, FlaskConical, Lightbulb } from "lucide-react"
 
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? ""
 
@@ -12,6 +12,8 @@ interface DashboardHeaderProps {
   status: LoadStatus
   lastUpdated: Date | null
   onRefresh: () => void
+  insightsCount?: number
+  onOpenInsights?: () => void
 }
 
 export function DashboardHeader({
@@ -19,6 +21,8 @@ export function DashboardHeader({
   status,
   lastUpdated,
   onRefresh,
+  insightsCount = 0,
+  onOpenInsights,
 }: DashboardHeaderProps) {
   const loading = status === "loading"
   return (
@@ -65,6 +69,18 @@ export function DashboardHeader({
             )}
           </div>
           <div className="flex items-center gap-2">
+            {onOpenInsights && (
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={onOpenInsights}
+                disabled={insightsCount === 0}
+                title={insightsCount === 0 ? "Nenhum insight disponível" : "Ver insights"}
+              >
+                <Lightbulb data-icon="inline-start" />
+                Insights{insightsCount > 0 ? ` (${insightsCount})` : ""}
+              </Button>
+            )}
             <Button size="sm" onClick={onRefresh} disabled={loading}>
               <RefreshCw data-icon="inline-start" className={cn(loading && "animate-spin")} />
               {loading ? "Atualizando…" : "Atualizar dados"}
