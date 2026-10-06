@@ -3,10 +3,12 @@
 import { useMemo, useState } from "react"
 import { useProcessos } from "@/hooks/use-processos"
 import { computeKpis } from "@/lib/metrics"
+import { computeInsights } from "@/lib/insights"
 import { isContratadoAditivado } from "@/lib/processo-utils"
 import type { Processo } from "@/lib/types"
 import { DashboardHeader } from "@/components/dashboard-header"
 import { KpiCards } from "@/components/kpi-cards"
+import { InsightsPanel } from "@/components/insights-panel"
 import { DashboardCharts } from "@/components/dashboard-charts"
 import { ProcessosTable } from "@/components/processos-table"
 import { ProcessoDetailSheet } from "@/components/processo-detail-sheet"
@@ -22,6 +24,7 @@ export default function Page() {
   const [contratadoFilterActive, setContratadoFilterActive] = useState(false)
 
   const kpis = useMemo(() => computeKpis(processos), [processos])
+  const insights = useMemo(() => computeInsights(processos), [processos])
   const loading = status === "loading"
 
   const processosDaTabela = useMemo(
@@ -75,6 +78,8 @@ export default function Page() {
           contratadoFilterActive={contratadoFilterActive}
           onToggleContratadoFilter={() => setContratadoFilterActive((v) => !v)}
         />
+
+        {!loading && <InsightsPanel insights={insights} />}
 
         {loading ? (
           <ContentSkeleton />
